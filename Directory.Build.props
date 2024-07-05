@@ -1,0 +1,32 @@
+﻿<Project>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0</TargetFrameworks>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+
+    <Description>Code fix provider for `C#` code log diagnosis `CA1727`, `CA2253`, `CA2254`. 针对 `C#` 代码日志诊断 `CA1727`, `CA2253`, `CA2254` 的代码修复提供程序</Description>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+
+    <Authors>stratos</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/stratosblue/Cuture.CodeAnalysis.LoggingCodeFixes</PackageProjectUrl>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>$(PackageProjectUrl)</RepositoryUrl>
+
+    <PackageTags>CA1727 CA2253 CA2254 logging log codefix code-fix</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+</Project>

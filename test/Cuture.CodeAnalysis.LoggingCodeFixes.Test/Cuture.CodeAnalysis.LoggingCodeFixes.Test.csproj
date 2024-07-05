@@ -1,0 +1,37 @@
+﻿<Project Sdk="MSTest.Sdk">
+
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="8.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <ExcludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</ExcludeAssets>
+      <IncludeAssets>compile</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing.MSTest" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeFix.Testing.MSTest" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing.MSTest" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Analyzer.Testing.MSTest" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeFix.Testing.MSTest" Version="1.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.CodeRefactoring.Testing.MSTest" Version="1.1.2" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Cuture.CodeAnalysis.LoggingCodeFixes\Cuture.CodeAnalysis.LoggingCodeFixes.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis.NetAnalyzers">
+      <HintPath>$(NuGetPackageRoot)Microsoft.CodeAnalysis.NetAnalyzers/8.0.0/analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+</Project>
