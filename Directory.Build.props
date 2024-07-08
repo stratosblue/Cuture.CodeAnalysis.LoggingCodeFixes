@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
 
     <Description>Code fix provider for `C#` code log diagnosis `CA1727`, `CA2253`, `CA2254`. 针对 `C#` 代码日志诊断 `CA1727`, `CA2253`, `CA2254` 的代码修复提供程序</Description>
 

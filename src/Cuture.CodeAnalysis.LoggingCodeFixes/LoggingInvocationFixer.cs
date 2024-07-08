@@ -4,13 +4,13 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
+using static Cuture.CodeAnalysis.LoggingCodeFixes.PlaceHolderNormalizer;
+
 namespace Cuture.CodeAnalysis.LoggingCodeFixes;
 
 public static class LoggingInvocationFixer
 {
     #region Private 字段
-
-    private static readonly Regex s_ignoreRegex = new("\\.|\\(.*?\\)|\\[.*?\\]|this\\.|This\\.", RegexOptions.Compiled);
 
     private static readonly Regex s_numericPlaceHolderRegex = new("\\{[\\d ]+\\}", RegexOptions.Compiled);
 
@@ -93,7 +93,7 @@ public static class LoggingInvocationFixer
 
             var arguments = invocationExpressionSyntax.ArgumentList.Arguments.ToList();
             arguments = arguments.SkipWhile(m => !ReferenceEquals(stringArgument, m)).Skip(1).ToList();
-            var text = syntaxToken.ValueText;
+            var text = syntaxToken.Text.Trim('"');
 
             var index = 0;
 
@@ -113,7 +113,7 @@ public static class LoggingInvocationFixer
                                 break;
 
                             case MemberAccessExpressionSyntax invocationMemberAccessExpressionSyntax:
-                                result = CreatePlaceHolderName(invocationMemberAccessExpressionSyntax.ToString()) ?? match.Value;
+                                result = Normalize(invocationMemberAccessExpressionSyntax.ToString()) ?? match.Value;
                                 break;
                         }
                         break;
@@ -123,11 +123,15 @@ public static class LoggingInvocationFixer
                         break;
 
                     case LiteralExpressionSyntax literalExpressionSyntax:
-                        result = CreatePlaceHolderName(semanticModel.GetTypeInfo(literalExpressionSyntax).Type.Name) ?? match.Value;
+                        result = Normalize(semanticModel.GetTypeInfo(literalExpressionSyntax).Type.Name) ?? match.Value;
                         break;
 
                     case MemberAccessExpressionSyntax memberAccessExpressionSyntax:
-                        result = CreatePlaceHolderName(memberAccessExpressionSyntax.ToString()) ?? match.Value;
+                        result = Normalize(memberAccessExpressionSyntax.ToString()) ?? match.Value;
+                        break;
+
+                    case ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax:
+                        result = Normalize(conditionalAccessExpressionSyntax.ToString()) ?? match.Value;
                         break;
                 }
                 return $"{{{result}}}";
@@ -154,7 +158,7 @@ public static class LoggingInvocationFixer
 
             text = s_placeHolderRegex.Replace(text, match =>
             {
-                return CreatePlaceHolderName(match.Value);
+                return Normalize(match.Value);
             });
 
             var newExpressionSyntax = CreateLiteralExpressionSyntax($"\"{text}\"");
@@ -175,27 +179,7 @@ public static class LoggingInvocationFixer
 
     private static InterpolatedStringTextSyntax CreateHolderInterpolatedStringTextSyntax(string valueText)
     {
-        return CreateInterpolatedStringTextSyntax($"{{{{{CreatePlaceHolderName(valueText)}}}}}");
-    }
-
-    private static string CreatePlaceHolderName(string valueText)
-    {
-        var valueSpan = valueText.AsSpan()
-                                 .Trim()
-                                 .TrimStart('{')
-                                 .TrimStart('@')
-                                 .TrimStart('_')
-                                 .TrimEnd('}')
-                                 .Trim();
-
-        var index = 0;
-        Span<char> newSpan = new char[valueSpan.Length + 4];
-        var firstChar = valueSpan[0];
-        newSpan[index++] = char.IsLetter(firstChar) ? char.ToUpper(firstChar) : firstChar;
-        valueSpan.Slice(1).CopyTo(newSpan.Slice(index));
-        index += valueSpan.Length - 1;
-
-        return s_ignoreRegex.Replace(newSpan.Slice(0, index).ToString(), "");
+        return CreateInterpolatedStringTextSyntax($"{{{{{Normalize(valueText)}}}}}");
     }
 
     private static IEnumerable<InterpolatedStringContentSyntaxDescriptor> EnumerateProcessedInterpolatedStringContentSyntaxes(IEnumerable<InterpolatedStringContentSyntax> contentSyntaxes)
@@ -269,12 +253,12 @@ public static class LoggingInvocationFixer
             if (identifierNameSyntax.Parent is InvocationExpressionSyntax invocationExpressionSyntax)
             {
                 var text = invocationExpressionSyntax.ArgumentList.Arguments[0].Expression.ToString();
-                return CreatePlaceHolderName(text);
+                return Normalize(text);
             }
         }
         else
         {
-            return CreatePlaceHolderName(identifierNameSyntax.Identifier.ValueText);
+            return Normalize(identifierNameSyntax.Identifier.ValueText);
         }
         return null;
     }

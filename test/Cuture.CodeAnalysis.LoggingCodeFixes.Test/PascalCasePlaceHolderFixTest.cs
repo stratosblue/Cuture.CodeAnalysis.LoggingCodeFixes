@@ -32,6 +32,28 @@ public class PascalCasePlaceHolderFixTest
         await VerifyCS.VerifyCodeFixAsync(test, [expected, expected, expected, expected], fixtest);
     }
 
+    [TestMethod]
+    public async Task Should_Success_With_ConditionalAccess()
+    {
+        LoggingCodeTemplate test =
+            """
+            var type = _logger.GetType();
+            var ex = new Exception();
+            _logger.LogInformation({|#0:"Value: {ex} {typeAssemblyEntryPointName} {exGetTypeGetPropertiesGetHashCode} {type}"|}, nameof(ex), type?.Assembly?.EntryPoint?.Name, ex?.GetType()?.GetProperties()?.GetHashCode(), type);
+            """;
+
+        LoggingCodeTemplate fixtest =
+            """
+            var type = _logger.GetType();
+            var ex = new Exception();
+            _logger.LogInformation("Value: {Ex} {TypeAssemblyEntryPointName} {ExGetTypeGetPropertiesGetHashCode} {Type}", nameof(ex), type?.Assembly?.EntryPoint?.Name, ex?.GetType()?.GetProperties()?.GetHashCode(), type);
+            """;
+
+        var expected = GetExpected();
+
+        await VerifyCS.VerifyCodeFixAsync(test, [expected, expected, expected, expected], fixtest);
+    }
+
     #endregion Public 方法
 
     #region Private 方法
