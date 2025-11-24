@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/solution items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="CodeMaid.config" />
+    <File Path="Directory.Build.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE.txt" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Cuture.CodeAnalysis.LoggingCodeFixes.Package/Cuture.CodeAnalysis.LoggingCodeFixes.Package.csproj" />
+    <Project Path="src/Cuture.CodeAnalysis.LoggingCodeFixes/Cuture.CodeAnalysis.LoggingCodeFixes.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Cuture.CodeAnalysis.LoggingCodeFixes.Test/Cuture.CodeAnalysis.LoggingCodeFixes.Test.csproj" />
+  </Folder>
+</Solution>

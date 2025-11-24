@@ -8,13 +8,13 @@
     <IsPackable>true</IsPackable>
 
     <PackageId>Cuture.CodeAnalysis.LoggingCodeFixes</PackageId>
-    
+
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <DevelopmentDependency>true</DevelopmentDependency>
     <NoPackageAnalysis>true</NoPackageAnalysis>
 
-    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddLoggingCodeFixesAnalyzersToOutput</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,10 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Cuture.CodeAnalysis.LoggingCodeFixes\Cuture.CodeAnalysis.LoggingCodeFixes.csproj" />
+    <ProjectReference Include="..\Cuture.CodeAnalysis.LoggingCodeFixes\Cuture.CodeAnalysis.LoggingCodeFixes.csproj" PrivateAssets="All" />
   </ItemGroup>
 
-  <Target Name="_AddAnalyzersToOutput">
+  <Target Name="_AddLoggingCodeFixesAnalyzersToOutput">
     <ItemGroup>
       <TfmSpecificPackageFile Include="$(OutputPath)\Cuture.CodeAnalysis.LoggingCodeFixes.dll" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
