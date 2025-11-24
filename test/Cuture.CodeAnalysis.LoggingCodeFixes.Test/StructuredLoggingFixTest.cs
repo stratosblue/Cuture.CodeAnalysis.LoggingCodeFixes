@@ -136,6 +136,65 @@ public class StructuredLoggingFixTest
     }
 
     [TestMethod]
+    public async Task Should_Success_For_Escape_Interpolation_String()
+    {
+        LoggingCodeTemplate test =
+            """
+            var type = _logger.GetType();
+            _logger.LogInformation({|#0:$"Value: \"{$"Score: {50}"}\" - \"{nameof(type)}\" - \"{$"Today: {DateTime.Now}"}\""|});
+            """;
+
+        LoggingCodeTemplate fixtest =
+            """
+            var type = _logger.GetType();
+            _logger.LogInformation($"Value: \"{{Value_0}}\" - \"{nameof(type)}\" - \"{{Value_1}}\"", $"Score: {50}", $"Today: {DateTime.Now}");
+            """;
+
+        var expected = GetExpected();
+        await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
+    }
+
+    [TestMethod]
+    public async Task Should_Success_For_Escape_String()
+    {
+        LoggingCodeTemplate test =
+            """
+            var type = _logger.GetType();
+            _logger.LogInformation({|#0:$"Value: \"{type.Name}\""|});
+            """;
+
+        LoggingCodeTemplate fixtest =
+            """
+            var type = _logger.GetType();
+            _logger.LogInformation("Value: \"{Name}\"", type.Name);
+            """;
+
+        var expected = GetExpected();
+        await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
+    }
+
+    [TestMethod]
+    public async Task Should_Success_For_NullCheck_ToString()
+    {
+        LoggingCodeTemplate test =
+            """
+            var type = _logger.GetType();
+            float? value = 1f;
+            _logger.LogInformation({|#0:$"Value: \"{type?.ToString()}\" - {value?.ToString("D2")} - {type?.Name?.ToString()}"|});
+            """;
+
+        LoggingCodeTemplate fixtest =
+            """
+            var type = _logger.GetType();
+            float? value = 1f;
+            _logger.LogInformation("Value: \"{Type}\" - {Value} - {Name}", type, value?.ToString("D2"), type?.Name?.ToString());
+            """;
+
+        var expected = GetExpected();
+        await VerifyCS.VerifyCodeFixAsync(test, expected, fixtest);
+    }
+
+    [TestMethod]
     public async Task Should_Success_With_Log_Exception()
     {
         LoggingCodeTemplate test =

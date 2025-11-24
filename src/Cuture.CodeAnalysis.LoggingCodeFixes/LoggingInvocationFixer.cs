@@ -184,6 +184,8 @@ public static class LoggingInvocationFixer
 
     private static IEnumerable<InterpolatedStringContentSyntaxDescriptor> EnumerateProcessedInterpolatedStringContentSyntaxes(IEnumerable<InterpolatedStringContentSyntax> contentSyntaxes)
     {
+        var argumentCount = 0;
+
         foreach (var contentSyntax in contentSyntaxes)
         {
             if (contentSyntax is not InterpolationSyntax interpolationSyntax)
@@ -237,6 +239,37 @@ public static class LoggingInvocationFixer
                     {
                         yield return (CreateHolderInterpolatedStringTextSyntax(memberAccessExpressionSyntax.ToString()), CreateArgumentSyntax(memberAccessExpressionSyntax), memberAccessExpressionSyntax.Expression);
                     }
+                    break;
+
+                case ConditionalAccessExpressionSyntax conditionalAccessExpressionSyntax:   //eg: xxx?.Xxx()
+                    {
+                        //TODO 递归展开处理多级 ToString()
+                        if (conditionalAccessExpressionSyntax.WhenNotNull is not InvocationExpressionSyntax invocationExpressionSyntax
+                            || invocationExpressionSyntax.Expression is not MemberBindingExpressionSyntax memberBindingExpressionSyntax)
+                        {
+                            yield return (CreateHolderInterpolatedStringTextSyntax(interpolationSyntax.ToString()), CreateArgumentSyntax(interpolationSyntax.Expression));
+                            break;
+                        }
+                        if (memberBindingExpressionSyntax.Name.Identifier.ValueText == "ToString")  //ToString
+                        {
+                            if (invocationExpressionSyntax.ArgumentList.Arguments.Count == 0)   //无参ToString()
+                            {
+                                yield return (CreateHolderInterpolatedStringTextSyntax(conditionalAccessExpressionSyntax.Expression.ToString()), CreateArgumentSyntax(conditionalAccessExpressionSyntax.Expression), conditionalAccessExpressionSyntax);
+                            }
+                            else
+                            {
+                                yield return (CreateHolderInterpolatedStringTextSyntax(conditionalAccessExpressionSyntax.Expression.ToString()), CreateArgumentSyntax(conditionalAccessExpressionSyntax), conditionalAccessExpressionSyntax);
+                            }
+                        }
+                        else
+                        {
+                            yield return (CreateHolderInterpolatedStringTextSyntax(interpolationSyntax.ToString()), CreateArgumentSyntax(interpolationSyntax.Expression));
+                        }
+                    }
+                    break;
+
+                case InterpolatedStringExpressionSyntax interpolatedStringExpressionSyntax: //插值字符串 $"xxxx: {1}"
+                    yield return (CreateHolderInterpolatedStringTextSyntax($"Value_{argumentCount++}"), CreateArgumentSyntax(interpolationSyntax.Expression));
                     break;
 
                 default:
