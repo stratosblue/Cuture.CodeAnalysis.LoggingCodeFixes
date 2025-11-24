@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Cuture.CodeAnalysis.LoggingCodeFixes_</AssemblyName>
+    <AssemblyName>Cuture.CodeAnalysis.LoggingCodeFixes</AssemblyName>
+    <PackageId>Cuture.CodeAnalysis.LoggingCodeFixes_</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
