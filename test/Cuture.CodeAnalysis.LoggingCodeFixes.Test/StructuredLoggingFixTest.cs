@@ -22,7 +22,7 @@ public class StructuredLoggingFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeName}", type.Name);
+            _logger.LogInformation("Value: {Name}", type.Name);
             """;
 
         var expected = GetExpected();
@@ -41,7 +41,7 @@ public class StructuredLoggingFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeAssemblyEntryPointName}", type.Assembly.EntryPoint.Name);
+            _logger.LogInformation("Value: {EntryPointName}", type.Assembly.EntryPoint.Name);
             """;
 
         var expected = GetExpected();
@@ -58,7 +58,7 @@ public class StructuredLoggingFixTest
 
         LoggingCodeTemplate fixtest =
             """
-            _logger.LogInformation("Value: {LoggerGetType}", _logger.GetType());
+            _logger.LogInformation("Value: {Type}", _logger.GetType());
             """;
 
         var expected = GetExpected();
@@ -75,7 +75,7 @@ public class StructuredLoggingFixTest
 
         LoggingCodeTemplate fixtest =
             """
-            _logger.LogInformation("Value: {LoggerGetTypeGetPropertiesGetHashCode}", _logger.GetType().GetProperties().GetHashCode());
+            _logger.LogInformation("Value: {PropertiesHashCode}", _logger.GetType().GetProperties().GetHashCode());
             """;
 
         var expected = GetExpected();
@@ -128,7 +128,7 @@ public class StructuredLoggingFixTest
         LoggingCodeTemplate fixtest =
             """
             Exception ex = null;
-            _logger.LogInformation(ex, $"Value: 1 - {nameof(TestClass)} - {{Logger}} - {{Ex}} - {{ExMessage}} - {{1f}} - {{GetTypeFullName}}", _logger, ex, ex.Message, 1f.ToString("D2"), this.GetType().FullName);
+            _logger.LogInformation(ex, $"Value: 1 - {nameof(TestClass)} - {{Logger}} - {{Ex}} - {{Message}} - {{1f}} - {{TypeFullName}}", _logger, ex, ex.Message, 1f.ToString("D2"), this.GetType().FullName);
             """;
 
         var expected = VerifyCS.Diagnostic("CA2254").WithLocation(0).WithArguments("LoggerExtensions.LogInformation(ILogger, string?, params object?[])");

@@ -22,7 +22,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             @"
             var type = _logger.GetType();
-            _logger.LogInformation(""\r\nValue: {TypeName}"", type?.Name);
+            _logger.LogInformation(""\r\nValue: {Name}"", type?.Name);
             ";
 
         var expected = GetExpected();
@@ -41,7 +41,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeName}", type?.Name);
+            _logger.LogInformation("Value: {Name}", type?.Name);
             """;
 
         var expected = GetExpected();
@@ -60,7 +60,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeAssemblyEntryPointName}", type?.Assembly?.EntryPoint?.Name);
+            _logger.LogInformation("Value: {EntryPointName}", type?.Assembly?.EntryPoint?.Name);
             """;
 
         var expected = GetExpected();
@@ -79,7 +79,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var ex = new Exception();
-            _logger.LogInformation("Value: {ExGetType}", ex?.GetType());
+            _logger.LogInformation("Value: {Type}", ex?.GetType());
             """;
 
         var expected = GetExpected();
@@ -98,7 +98,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var ex = new Exception();
-            _logger.LogInformation("Value: {ExGetTypeGetPropertiesGetHashCode}", ex?.GetType()?.GetProperties()?.GetHashCode());
+            _logger.LogInformation("Value: {PropertiesHashCode}", ex?.GetType()?.GetProperties()?.GetHashCode());
             """;
 
         var expected = GetExpected();
@@ -117,7 +117,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             @"
             var type = _logger.GetType();
-            _logger.LogInformation(""Value: {TypeName}\r\n"", type?.Name);
+            _logger.LogInformation(""Value: {Name}\r\n"", type?.Name);
             ";
 
         var expected = GetExpected();
@@ -136,7 +136,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             @"
             var type = _logger.GetType();
-            _logger.LogInformation(""Value: {TypeName}\r\n{Type}"", type?.Name, type);
+            _logger.LogInformation(""Value: {Name}\r\n{Type}"", type?.Name, type);
             ";
 
         var expected = GetExpected();
@@ -155,7 +155,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             @"
             var type = _logger.GetType();
-            _logger.LogInformation(""Value\r\n: {TypeName}\r\n{Type}\r\n"", type?.Name, type);
+            _logger.LogInformation(""Value\r\n: {Name}\r\n{Type}\r\n"", type?.Name, type);
             ";
 
         var expected = GetExpected();
@@ -174,7 +174,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeName}", type.Name);
+            _logger.LogInformation("Value: {Name}", type.Name);
             """;
 
         var expected = GetExpected();
@@ -193,7 +193,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var type = _logger.GetType();
-            _logger.LogInformation("Value: {TypeAssemblyEntryPointName}", type.Assembly.EntryPoint.Name);
+            _logger.LogInformation("Value: {EntryPointName}", type.Assembly.EntryPoint.Name);
             """;
 
         var expected = GetExpected();
@@ -212,7 +212,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var ex = new Exception();
-            _logger.LogInformation("Value: {ExGetType}", ex.GetType());
+            _logger.LogInformation("Value: {Type}", ex.GetType());
             """;
 
         var expected = GetExpected();
@@ -231,7 +231,7 @@ public class NumericPlaceHolderFixTest
         LoggingCodeTemplate fixtest =
             """
             var ex = new Exception();
-            _logger.LogInformation("Value: {ExGetTypeGetPropertiesGetHashCode}", ex.GetType().GetProperties().GetHashCode());
+            _logger.LogInformation("Value: {PropertiesHashCode}", ex.GetType().GetProperties().GetHashCode());
             """;
 
         var expected = GetExpected();
@@ -290,7 +290,7 @@ public class NumericPlaceHolderFixTest
             """
             var type = _logger.GetType();
             var ex = new Exception();
-            _logger.LogInformation("Value: {Ex} {TypeAssemblyEntryPointName} {ExGetTypeGetPropertiesGetHashCode} {Type}", nameof(ex), type.Assembly?.EntryPoint.Name, ex.GetType().GetProperties()?.GetHashCode(), type);
+            _logger.LogInformation("Value: {Ex} {EntryPointName} {PropertiesHashCode} {Type}", nameof(ex), type.Assembly?.EntryPoint.Name, ex.GetType().GetProperties()?.GetHashCode(), type);
             """;
 
         var expected = GetExpected();
