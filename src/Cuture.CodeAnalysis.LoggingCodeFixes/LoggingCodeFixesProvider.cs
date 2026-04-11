@@ -13,7 +13,7 @@ public class LoggingCodeFixesProvider : CodeFixProvider
 {
     #region Public 属性
 
-    public override sealed ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create("CA1727", "CA2253", "CA2254");
+    public override sealed ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create("CA1727", "CA1873", "CA2253", "CA2254");
 
     #endregion Public 属性
 
@@ -31,6 +31,10 @@ public class LoggingCodeFixesProvider : CodeFixProvider
                     await RegisterPascalCaseCodeFixAsync(context, diagnostic).ConfigureAwait(false);
                     break;
 
+                case "CA1873":  //可能高开销日志
+                    await RegisterFixAsLoggerMessageCodeFixAsync(context, diagnostic).ConfigureAwait(false);
+                    break;
+
                 case "CA2253":  //占位符为纯数字
                     await RegisterNumericPlaceHolderCodeFixAsync(context, diagnostic).ConfigureAwait(false);
                     break;
@@ -45,6 +49,20 @@ public class LoggingCodeFixesProvider : CodeFixProvider
     #endregion Public 方法
 
     #region Private 方法
+
+    private async Task RegisterFixAsLoggerMessageCodeFixAsync(CodeFixContext context, Diagnostic diagnostic)
+    {
+        var syntaxRoot = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+
+        var diagnosticSpan = diagnostic.Location.SourceSpan;
+
+        var invocationExpressionSyntax = syntaxRoot.FindToken(diagnosticSpan.Start).Parent.AncestorsAndSelf().OfType<InvocationExpressionSyntax>().First();
+
+        var codeAction = CodeAction.Create(title: "修正为LoggerMessage",
+                                           createChangedDocument: cancellationToken => LoggerMessageInvocationFixer.FixAsync(context.Document, invocationExpressionSyntax, cancellationToken),
+                                           equivalenceKey: "FixAsLoggerMessage");
+        context.RegisterCodeFix(codeAction, diagnostic);
+    }
 
     private async Task RegisterFixAsStructuredLoggingCodeFixAsync(CodeFixContext context, Diagnostic diagnostic)
     {

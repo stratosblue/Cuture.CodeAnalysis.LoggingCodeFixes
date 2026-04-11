@@ -41,7 +41,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult, string)"/>
     public static async Task VerifyCodeFixAsync(string source, DiagnosticResult expected, string fixedSource)
-        => await VerifyCodeFixAsync(source, new[] { expected }, fixedSource);
+        => await VerifyCodeFixAsync(source, [expected], fixedSource);
 
     /// <inheritdoc cref="CodeFixVerifier{TAnalyzer, TCodeFix, TTest, TVerifier}.VerifyCodeFixAsync(string, DiagnosticResult[], string)"/>
     public static async Task VerifyCodeFixAsync(string source, DiagnosticResult[] expected, string fixedSource)
@@ -53,7 +53,7 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         };
 
         var packageIdentities = ImmutableArray.Create(new PackageIdentity[] { new("Microsoft.Extensions.Logging.Abstractions", "8.0.0"), new("Microsoft.Extensions.Logging", "8.0.0") });
-        var referenceAssemblies = ReferenceAssemblies.Net.Net70.WithPackages(packageIdentities);
+        var referenceAssemblies = ReferenceAssemblies.Net.Net80.WithPackages(packageIdentities);
         test.ReferenceAssemblies = referenceAssemblies;
 
         test.DisabledDiagnostics.Add("CA1848");
