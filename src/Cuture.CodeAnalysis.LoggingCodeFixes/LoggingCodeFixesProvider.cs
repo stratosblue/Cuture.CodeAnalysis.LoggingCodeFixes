@@ -13,7 +13,7 @@ public class LoggingCodeFixesProvider : CodeFixProvider
 {
     #region Public 属性
 
-    public override sealed ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create("CA1727", "CA1873", "CA2253", "CA2254");
+    public override sealed ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create("CA1727", "CA1848", "CA1873", "CA2253", "CA2254");
 
     #endregion Public 属性
 
@@ -31,6 +31,7 @@ public class LoggingCodeFixesProvider : CodeFixProvider
                     await RegisterPascalCaseCodeFixAsync(context, diagnostic).ConfigureAwait(false);
                     break;
 
+                case "CA1848":  //使用LoggerMessage委托
                 case "CA1873":  //可能高开销日志
                     await RegisterFixAsLoggerMessageCodeFixAsync(context, diagnostic).ConfigureAwait(false);
                     break;

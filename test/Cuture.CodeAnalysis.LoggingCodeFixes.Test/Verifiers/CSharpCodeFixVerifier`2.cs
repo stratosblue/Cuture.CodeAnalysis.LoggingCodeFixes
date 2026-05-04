@@ -56,7 +56,10 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         var referenceAssemblies = ReferenceAssemblies.Net.Net80.WithPackages(packageIdentities);
         test.ReferenceAssemblies = referenceAssemblies;
 
-        test.DisabledDiagnostics.Add("CA1848");
+        if (!ContainsExpectedDiagnostic(expected, "CA1848"))
+        {
+            test.DisabledDiagnostics.Add("CA1848");
+        }
 
         test.ExpectedDiagnostics.AddRange(expected);
 
@@ -64,5 +67,18 @@ public static partial class CSharpCodeFixVerifier<TAnalyzer, TCodeFix>
         test.CodeActionValidationMode = CodeActionValidationMode.None;
 
         await test.RunAsync(CancellationToken.None);
+    }
+
+    private static bool ContainsExpectedDiagnostic(IEnumerable<DiagnosticResult> expectedDiagnostics, string diagnosticId)
+    {
+        foreach (var expectedDiagnostic in expectedDiagnostics)
+        {
+            if (string.Equals(expectedDiagnostic.Id, diagnosticId, StringComparison.Ordinal))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
